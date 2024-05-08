@@ -1,0 +1,159 @@
+% Section 1 - ROS 2 development workflow
+% Roberto Masocco <roberto.masocco@uniroma2.it>
+% May 16, 2023
+
+% ### ROS 2 development workflow ###
+\section{ROS 2 development workflow}
+\graphicspath{{figs/section1/}}
+
+% --- Installing ROS 2 ---
+\begin{frame}{Installing ROS 2}{HOWTO}
+  On \textbg{Ubuntu} systems, the easiest way to install ROS 2 Humble is through \href{https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html}{\color{blue}\underline{Debian packages}}.
+  \newline\newline
+  The installation steps can be summarized as follows:
+  \begin{enumerate}
+    \item ensure that \textbg{locales} are properly configured;
+    \item \textbg{upgrade} your system (required because of some potential \href{https://github.com/ros2/ros2/issues/1272}{\color{blue}\underline{issues with \texttt{udev}}} that might break your installation \smiley);
+    \item add and configure \textbg{apt repositories};
+    \item \textbg{install} packages.
+  \end{enumerate}
+  We have a script for this: \href{https://github.com/IntelligentSystemsLabUTV/ros2-examples/blob/humble/bin/ros2_humble_install.sh}{\color{blue}\underline{\texttt{bin/ros2\_humble\_install.sh}}}.
+\end{frame}
+\begin{frame}{Installing ROS 2}{Sourcing the installation}
+  After the installation is complete, in order to use \textbg{CLI tools} and have libraries available to \textbg{build packages}, you need to \textbg{source the installation}:
+  \newline\newline
+  \texttt{source /opt/ros/humble/setup.bash} (there are also a \texttt{.zsh} and a \texttt{.sh})
+  \newline\newline
+  so that your shell, and all its child processes from then on, will know the \textbg{paths} of all the \textbg{executables}, \textbg{shared objects} (libraries), and \textbg{include directories} installed by ROS 2.
+  \newline\newline
+  Additional commands are required to set up \textbg{command line completion} and \textbg{environment variables}.\\
+  We have a script for this too: \href{https://github.com/IntelligentSystemsLabUTV/ros2-examples/blob/humble/config/ros2_cmds.sh}{\color{blue}\underline{\texttt{config/ros2\_cmds.sh}}}.\\
+  Source it, then enter \texttt{ros2humble} and you're good to go!
+\end{frame}
+
+% --- Language support ---
+\begin{frame}{Language support}{Low- vs high-level programming}
+  Currently, ROS 2 officially supports \textbg{two programming languages}:
+  \begin{itemize}
+    \item \textbg{C++} (C++17 in Humble)
+    \item \textbg{Python} ($\geq$3.5, 3.10 works with Humble)
+  \end{itemize}
+  You can develop software packages using \textbg{only one} of them, or \textbg{both} at the same time.
+\end{frame}
+\begin{frame}{Language support}{Low- vs high-level programming}
+  The two languages are both fully supported since they are \textbg{complementary}:
+  \begin{itemize}
+    \item \textbg{C++} allows to build complex software using \textbg{modern paradigms}, but also to easily access the \textbg{hardware}, \textbg{libraries}, and \textbg{operating system} APIs when required, and to \textbg{optimize} the code for \textbg{performance}.
+    \item \textbg{Python} allows to \textbg{rapidly prototype} software, especially high-level modules, and to easily \textbg{interact} with the user and \textbg{visualize data}.
+  \end{itemize}
+  Note how one lacks the features of the other, and vice versa.
+  \begin{block}{}
+    \centering
+    \textbf{This course will focus on C++, because of its better performance, major functionalities, and widespread use in the industry and robotics development community.}
+  \end{block}
+  The entire \href{https://github.com/ros2/ros2cli/tree/humble}{\color{blue}\underline{\texttt{ros2cli}}} suite is written in Python.\\
+  Python examples will still be provided and discussed whenever possible.
+\end{frame}
+\begin{frame}{Language support}{The build system}
+  The ROS 2 build system supports both \textbg{C++} and \textbg{Python} packages through a common \textbg{package manager}: \href{https://colcon.readthedocs.io/en/released/}{\color{blue}\underline{\texttt{colcon}}} (collective construction).
+  \newline\newline
+  Spawned as a child project of the ROS community, its main features are:
+  \begin{itemize}
+    \item organization of the \textbg{build workspace} in a set of standard directories;
+    \item \textbg{isolated} builds of packages, with \textbg{no pollution} of the system;
+    \item automatic \textbg{dependency resolution} and \textbg{parallel} builds;
+    \item support for \textbg{C}/\textbg{C++} packages through \href{https://cmake.org/}{\color{blue}\underline{CMake}};
+    \item support for \textbg{Python} packages through \href{https://setuptools.pypa.io/en/latest/}{\color{blue}{\underline{\texttt{setuptools}}}}.
+  \end{itemize}
+  All its configuration for each package can be found in a \texttt{package.xml} \textbg{manifest file}.
+\end{frame}
+\begin{frame}{Language support}{CMake}
+  \begin{columns}
+    \column{.5\textwidth}
+    CMake is a \textbg{cross-platform} build configuration generator, which allows to build software using a \textbg{single}, \textbg{unified syntax} on all supported platforms.\\
+    Remember \textbg{Makefiles}? CMake is a compiler-agnostic \textbg{Makefile generator}.
+    \newline\newline
+    We will write \textbg{\texttt{CMakeLists.txt}} files, which are essentially \textbg{scripts} that tell CMake how to build our software.
+    \newline\newline
+    ROS 2 extends CMake with a set of \textbg{macros} and \textbg{functions}: the \href{https://docs.ros.org/en/humble/How-To-Guides/Ament-CMake-Documentation.html}{\color{blue}{\underline{\texttt{ament}}}} library.
+
+    \column{.5\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=.7\textwidth]{cmake}
+      \caption{CMake logo.}
+      \label{fig:cmake}
+    \end{figure}
+  \end{columns}
+\end{frame}
+\begin{frame}{Language support}{setuptools}
+  \begin{columns}
+    \column{.5\textwidth}
+    \texttt{setuptools} is a \textbg{Python library} designed to ease the setup of Python projects, namely Python software packages.\\
+    Remember nightmarish \texttt{import} issues? setuptools is a \textbg{dependency resolver}.
+    \newline\newline
+    We will write:
+    \begin{itemize}
+      \item \textbg{\texttt{setup.py}} files, in which the \texttt{setup(...)} function specifies the package's metadata and dependencies;
+      \item \textbg{\texttt{setup.cfg}} files, which specifies the location of all \textbg{executable scripts} in the package.
+    \end{itemize}
+
+    \column{.5\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=.7\textwidth]{setuptools}
+      \caption{setuptools logo.}
+      \label{fig:setuptools}
+    \end{figure}
+  \end{columns}
+\end{frame}
+\begin{frame}{Language support}{Building packages with colcon}
+  The only \texttt{colcon} command you may ever use is
+  \newline\newline
+  \texttt{colcon build}
+  \newline\newline
+  which builds all packages in the current workspace (\emph{i.e.}, directory and child directories).\\
+  It has many options, but the most useful ones are:
+  \begin{itemize}
+    \item \texttt{-{}-event-handlers} to specify which \textbg{build events} to log (\emph{e.g.}, \texttt{console\_direct+});
+    \item \texttt{-{}-packages-select} to specify which packages to build;
+    \item \texttt{-{}-symlink-install} to \textbg{symlink} the built packages into the \texttt{install/} directory, instead of copying them;
+    \item \texttt{-{}-packages-up-to} to build a package and all its dependencies;
+    \item \texttt{-{}-packages-ignore} to ignore a package and all its dependencies.
+  \end{itemize}
+\end{frame}
+\begin{frame}{Language support}{A note}
+  \begin{alertblock}{Beware!}
+    \centering
+    \textbr{During development, a good 85\% of all issues happens during integration and build.}
+  \end{alertblock}
+\end{frame}
+
+% --- The workspace ---
+\begin{frame}{The workspace}{Anatomy of a ROS 2 development directory}
+  The organization of directories in a ROS 2 workspace is \textbg{standardized} because of \texttt{colcon}.\\
+  We have, at least:
+  \begin{itemize}
+    \item \texttt{build/} (autogenerated), which contains the \textbg{build artifacts} of all packages;
+    \item \texttt{install/} (autogenerated), which contains the \textbg{built packages};
+    \item \texttt{log/} (autogenerated), which contains the \textbg{build logs};
+    \item \texttt{src/}, which contains the \textbg{source code} of all packages.
+  \end{itemize}
+  \begin{alertblock}{}
+    \centering
+    \textbr{If you use Git, remember to add \texttt{build/}, \texttt{install/}, and \texttt{log/} to your \texttt{.gitignore} file!}\\
+    Similarily, \texttt{colcon} ignores them when recursively looking for packages to build.
+  \end{alertblock}
+\end{frame}
+\begin{frame}{The workspace}{Package creation}
+  In the beginning was
+  \newline\newline
+  \texttt{ros2 pkg create <package\_name>}
+  \newline\newline
+  which has way too many options. The main ones are:
+  \begin{itemize}
+    \item \texttt{-{}-destination-directory src/}
+    \item \texttt{-{}-build-type <build\_type>} (\texttt{ament\_cmake} or \texttt{ament\_python})
+    \item \texttt{-{}-dependencies <package\_name> ...}
+  \end{itemize}
+\end{frame}
