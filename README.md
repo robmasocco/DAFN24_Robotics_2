@@ -1,6 +1,6 @@
-# DAFN23_Robotics_2
+# DAFN24_Robotics_2
 
-DAFN 2023 - Robotics 2: ROS 2 - Workflow and basic communication
+DAFN 2024 - Robotics 2: ROS 2 - Workflow and basic communication
 
 LaTeX source code and build files.
 

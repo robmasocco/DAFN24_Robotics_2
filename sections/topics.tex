@@ -104,24 +104,6 @@ int64 number\end{lstlisting}
   \textbg{Nodes} can be inspected with the \texttt{ros2 node} command, and its many verbs.
 \end{frame}
 
-% --- New features in Humble ---
-\begin{frame}{New features in Humble}{Message topics}
-  ROS 2 Humble Hawksbill introduces software support for the following \textbg{new topic features}:
-  \begin{itemize}
-    \item \href{https://ros.org/reps/rep-2007.html}{\color{blue}{\underline{\textbf{Type adaptation}}}}: when a node subscribes or publishes to a topic, it can define routines to \textbg{automatically convert messages} to/from a different type.
-    \item \href{https://github.com/osrf/negotiated}{\color{blue}{\underline{\textbf{Type negotiation}}}}: when a node subscribes or publishes to a topic, it can \textbg{negotiate with other nodes the data type} to be used; this feature is being implemented in a \textbg{decentralized} fashion.
-    \item \href{https://github.com/ros2/examples/blob/humble/rclcpp/topics/minimal_subscriber/content_filtering.cpp}{\color{blue}{\underline{\textbf{Content filtering}}}}: when a node subscribes to a topic, it can specify that it requires only a \textbg{subset of the message fields} to be delivered.
-  \end{itemize}
-\end{frame}
-\begin{frame}{New features in Humble}{Type adaptation on hardware accelerators}
-  \begin{figure}
-    \centering
-    \animategraphics[loop,autoplay,scale=0.36]{10}{adaptation/adaptation-}{0}{179}
-    \caption{Type adaptation in an Nvidia Jetson image processing pipeline.}
-    \label{fig:adaptation}
-  \end{figure}
-\end{frame}
-
 % --- Example - Topic pub/sub ---
 \begin{frame}{Example}{Topic pub/sub}
   \begin{block}{}
