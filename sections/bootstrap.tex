@@ -8,24 +8,24 @@
 
 % --- Code examples ---
 \begin{frame}{Code examples}
-	Find all course materials on \textbg{GitHub} at \href{https://github.com/IntelligentSystemsLabUTV/ros2-examples}{\color{blue}\underline{ros2-examples}} (\texttt{humble} branch).
-	\newline\newline
-	The repository is organized as a \textbg{ROS 2 workspace} ready to be built, and intended to support \href{https://code.visualstudio.com/}{\color{blue}\underline{Visual Studio Code}} as \textbg{IDE}. Find all information in \href{https://github.com/IntelligentSystemsLabUTV/ros2-examples/blob/humble/README.md}{\color{blue}\underline{\texttt{README.md}}}.
-	\newline\newline
-	It is also organized with \textbg{Docker containers} in mind, and supports the automated build of development containers in VS Code.\\
+	Find all course materials on \textbg{GitHub} at \href{https://github.com/IntelligentSystemsLabUTV/ros2-examples}{\color{blue}\underline{ros2-examples}} (\texttt{humble} branch).\\
+	\bigskip
+	The repository is organized as a \textbg{ROS 2 workspace} ready to be built, and intended to support \href{https://code.visualstudio.com/}{\color{blue}\underline{Visual Studio Code}} as \textbg{IDE}. Find all information in \href{https://github.com/IntelligentSystemsLabUTV/ros2-examples/blob/humble/README.md}{\color{blue}\underline{\texttt{README.md}}}.\\
+	\bigskip
+	It is also organized with \textbg{Docker containers} in mind, and supports the automated build of development containers in VS Code (more on this later).\\
 	Such containers are based on our \href{https://github.com/IntelligentSystemsLabUTV/dua-template}{\color{blue}{\underline{\textbf{Distributed Unified Architecture}}}} project, which is part of Roberto Masocco's PhD thesis.\\
 	Their inner workings are totally transparent, but if you're curious see \href{https://github.com/IntelligentSystemsLabUTV/ros2-examples/blob/humble/dua_template.md}{\color{blue}\underline{\texttt{dua\_template.md}}}.
 	\begin{block}{}
 		\centering
-		Suggestion: clone it and set up your branch locally, to be still able to get and \texttt{merge} updates.
+		Suggestion: clone it and checkout your own branch locally, to be still able to get and \texttt{merge} updates from remote.
 	\end{block}
 \end{frame}
 
 % --- C++ fundamentals ---
 \begin{frame}{C++ fundamentals}{Back to basics}
 	C++ has been developed from C, and is a \textbg{compiled}, \textbg{strongly-typed} (mostly) language.\\
-	Its main features began as extensions of C to support modern \textbg{object-oriented programming} and \textbg{generic programming} paradigms, but it has evolved into much more.
-	\newline\newline
+	Its main features began as extensions of C to support modern \textbg{object-oriented programming} and \textbg{generic programming} paradigms, but it has evolved into much more.\\
+	\bigskip
 	In order to get started with ROS 2, a minimal subset of its features is required.\\
 	Dust off your C programming skills, then add:
 	\begin{itemize}
@@ -54,8 +54,11 @@ private:
 	Pay attention to \href{https://www.geeksforgeeks.org/inheritance-in-c/}{\color{blue}\underline{inheritance}} rules.
 \end{frame}
 \begin{frame}{C++ fundamentals}{Namespaces}
-  \textbg{Subdivision} of the global namespace to avoid naming collisions between multiple libraries, resolved with the \textbg{\texttt{::} operator}.
-  \newline\newline
+  C++ was designed to allow for the developmnent of large codebases, which integrated libraries and code from potentially different sources.\\
+  \bigskip
+  \textbg{Subdivision} of the \textbg{global namespace} is necessary to avoid naming collisions between multiple libraries, resolved with the \textbg{\texttt{::} operator}.\\
+  It works like the dot in web URLs (\emph{e.g.}, \texttt{ing.uniroma2.it}).\\
+  \bigskip
   Names may become very long, so usually they are hidden with \texttt{typedef}.
 \end{frame}
 \begin{frame}[fragile]{C++ fundamentals}{Namespaces}
@@ -89,6 +92,7 @@ std::vector<int> int_vector;
 std::vector<double> double_vector;\end{lstlisting}
 	\end{columns}
   \vspace{.5cm}
+  It is possible to write \textbg{specialized code} for a specific data type in the template definition.\\
 	These too make names very long, so are usually \texttt{typedef}'d.
 \end{frame}
 \begin{frame}[fragile]{C++ fundamentals}{Shared pointers}
@@ -107,5 +111,6 @@ std::vector<double> double_vector;\end{lstlisting}
 // Here the node and its pointer have been destroyed!\end{lstlisting}
 	\end{columns}
   \vspace{.1cm}
-	Obviously \texttt{std::shared\_ptr} is a template class. ROS 2 heavily relies on them, and the \texttt{SharedPtr} alias is frequently defined.
+	Obviously \texttt{std::shared\_ptr} is a template class.\\
+  ROS 2 heavily relies on them, and the \texttt{SharedPtr} alias is frequently defined.
 \end{frame}
