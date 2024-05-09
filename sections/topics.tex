@@ -8,7 +8,7 @@
 
 % --- ROS 2 messages ---
 \begin{frame}{ROS 2 messages}
-	A message is a \textbg{single DDS data packet} sent over a \textbg{topic}, from \textbg{publisher nodes} to \textbg{subscriber nodes}, with a specific \textbg{QoS policy}.
+	A message is a \textbg{single data packet} sent over a \textbg{topic}, from \textbg{publisher nodes} to \textbg{subscriber nodes}, with a specific \textbg{QoS policy}.
 	\begin{figure}
 		\centering
 		\includegraphics[scale=.16]{ros2Msg.jpg}
@@ -20,7 +20,7 @@
 
 % --- Interface files - Messages ---
 \begin{frame}[fragile]{Interface files}{Messages}
-	Interface files format is \textbg{specified by the DDS standard}, with data types resolved to machine types according to the platform being used\footnote{\href{https://docs.ros.org/en/humble/Concepts/About-ROS-Interfaces.html}{\color{blue}\underline{About ROS 2 interfaces}} (ROS 2 Humble docs)}.\\
+	Interface files format is \textbg{derived from the DDS standard}, with data types resolved to machine types according to the platform being used\footnote{\href{https://docs.ros.org/en/humble/Concepts/About-ROS-Interfaces.html}{\color{blue}\underline{About ROS 2 interfaces}} (ROS 2 Humble docs)}.\\
 	Message file names end with \textbg{\texttt{.msg}}.\\
 	Things start very simply...
 
@@ -44,6 +44,7 @@ string data\end{lstlisting}
 		% Listing: sensor_msgs/msg/Image
 		\begin{lstlisting}[language=ros2msg, caption=Definition of the \texttt{sensor\_msgs/msg/Image} composite message.]
 std_msgs/Header header
+# ^ This includes another message type as a sub-structure
 
 uint32 height
 uint32 width
@@ -52,25 +53,26 @@ string encoding
 
 uint8 is_bigendian
 uint32 step
-uint8[] data\end{lstlisting}
+uint8[] data # This specifies a variable-length uint8 array\end{lstlisting}
 	\end{columns}
 
 \end{frame}
 \begin{frame}[fragile]{Interface files}{Messages}
-	Special values (\emph{i.e.}, \textbg{constants}) may be specified.
+	Special values (\emph{i.e.}, \textbg{constants}) or \textbg{default values} may be specified.
 
 	\begin{columns}
 		\column{.9\textwidth}
 		% Listing: message with constant
-		\begin{lstlisting}[language=ros2msg, caption=Definition of an example message with a constant value.]
+		\begin{lstlisting}[language=ros2msg, caption=Definition of an example message with a constant and a default value.]
 int64 MYNUM=1 # Must be of compatible type
 
-int64 number\end{lstlisting}
+int64 number
+int64 number_with_default 2\end{lstlisting}
 	\end{columns}
 
-	They are not bound to any field and will appear as \textbg{special selectable values} in the generated C++/Python libraries.\\
-	ROS 2 adds its own \textbg{guidelines}\footnote{\href{https://github.com/IntelligentSystemsLabUTV/ros2-examples/blob/humble/interfaces.md}{\color{blue}\underline{ros2-examples/interfaces.md}}}, and installed interfaces can be inspected with
-  \newline\newline
+	They are not bound to any field and will appear as \textbg{special selectable values} in the generated C++/Python libraries code.\\
+	ROS 2 adds its own \textbg{guidelines}\footnote{\href{https://github.com/IntelligentSystemsLabUTV/ros2-examples/blob/humble/interfaces.md}{\color{blue}\underline{ros2-examples/interfaces.md}}}, and installed interfaces can be inspected with\\
+  \medskip
 	\texttt{ros2 interface show}
 \end{frame}
 
@@ -108,7 +110,10 @@ int64 number\end{lstlisting}
 \begin{frame}{Example}{Topic pub/sub}
   \begin{block}{}
     \centering
-	  Now go have a look at the \href{https://github.com/IntelligentSystemsLabUTV/ros2-examples/tree/humble/src/cpp/topic_pubsub_cpp}{\color{blue}\underline{ros2-examples/src/cpp/topic\_pubsub\_cpp}} package!
+	  Now go have a look at the first two example packages:\\
+    \href{https://github.com/IntelligentSystemsLabUTV/ros2-examples/tree/humble/src/cpp/topic_pubsub_cpp}{\color{blue}\underline{ros2-examples/src/cpp/topic\_pubsub\_cpp}}\\
+    \smallskip
+    \href{https://github.com/IntelligentSystemsLabUTV/ros2-examples/tree/humble/src/python/topic_pubsub_py}{\color{blue}\underline{ros2-examples/src/python/topic\_pubsub\_py}}
   \end{block}
 \end{frame}
 
@@ -119,7 +124,7 @@ int64 number\end{lstlisting}
     \item Run the \href{https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html\#try-some-examples}{\color{blue}\underline{demo nodes}}.
     \item Inspect the demo topics.
     \item Interact with the demo nodes from the command line.
-    \item Clone \href{https://github.com/IntelligentSystemsLabUTV/ros2-examples}{\color{blue}\underline{\texttt{ros2-examples}}} and rebuild the \texttt{topic\_pubsub\_cpp} package.
-    \item Listen to the \texttt{/rosout} topic from the command line.
+    \item Clone \href{https://github.com/IntelligentSystemsLabUTV/ros2-examples}{\color{blue}\underline{\texttt{ros2-examples}}} as suggested and rebuild the first example packages.
+    \item Listen to the \texttt{/rosout} topic from the command line while other nodes run.
   \end{itemize}
 \end{frame}
